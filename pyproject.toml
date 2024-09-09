@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "gisp2-regelation"
+version = "0.1.0"
+description = ""
+authors = ["Ethan Pierce <ethan.pierce@colorado.edu>"]
+readme = "README.md"
+packages = [{include = "gisp2_regelation"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+landlab = "^2.8.0"
+scipy = "^1.14.1"
+pandas = "^2.2.2"
+matplotlib = "^3.9.2"
+seaborn = "^0.13.2"
+numpy = "<2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
