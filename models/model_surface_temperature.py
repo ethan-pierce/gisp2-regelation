@@ -25,17 +25,47 @@ lapse_rate = 6 / 1000
 elevation_diff = 3232 - 2917
 kindler['Temperature'] = kindler['Temperature'] - lapse_rate * elevation_diff
 
-sns.set_style('whitegrid')
+basal_temperature = pd.read_csv('results/basal_temperature_reconstruction.csv')
+age = basal_temperature['Age'] * 1e-3
+acc = basal_temperature['Accumulation']
+Tb = basal_temperature['Basal temperature']
 
-# fig, ax = plt.subplots(figsize = (12, 4))
-# plt.plot(markle_grip['Age'], markle_grip['Temperature'], label = 'Markle (GRIP)', color = 'dodgerblue', lw = 0.8)
-# plt.plot(kindler['Age'], kindler['Temperature'], label = 'Kindler (NGRIP)', color = 'orangered', lw = 0.8)
-# plt.plot(alley_temp['Age'], alley_temp['Temperature'], label = 'Alley (GISP-2)', color = 'darkblue', lw = 0.8)  
+Tbwarm = np.where(Tb >= 271.12, 1, 0)
+dt = np.diff(age, prepend = 0)
+print(np.sum(dt * Tbwarm))
+quit()
+
+Ts = basal_temperature['Temperature'] + 273.15
+
+sns.set_context('talk')
+fig, ax = plt.subplots(2, 1, figsize = (18, 6), sharex = True, height_ratios = [1, 2])
+
+ax[0].plot(age, acc, label = 'Accumulation', color = 'dodgerblue', lw = 1.1)
+ax[0].set_ylabel('$\dot{b}$ (m a$^{-1})$')
+ax[0].annotate('Accumulation', xy = (112, acc.iloc[-1] + 0.01), color = 'dodgerblue')
+
+ax[1].plot(age, Tb, label = 'Basal temperature', color = 'orange', lw = 1.1)
+ax[1].plot(age, Ts, label = 'Surface temperature', color = 'firebrick', lw = 1.1)
+ax[1].set_xlabel('Age (ka)')
+ax[1].set_ylabel('Temperature (K)')
+ax[1].annotate('Base', xy = (118, Tb.iloc[-1] + 2), color = 'orange')
+ax[1].annotate('Surface', xy = (118, Ts.iloc[-1] + 2), color = 'firebrick')
+
+plt.tight_layout()
+plt.savefig('results/figures/kindler_temperature_reconstruction.png', dpi = 300)
+plt.show()
+
+
+# fig, ax = plt.subplots(figsize = (18, 6))
+# plt.plot(markle_grip['Age'], markle_grip['Temperature'], label = 'Markle (GRIP)', color = 'dodgerblue', lw = 0.8, alpha = 0.8)
+# plt.plot(kindler['Age'], kindler['Temperature'], label = 'Kindler (NGRIP)', color = 'orangered', lw = 0.8, alpha = 0.8)
+# plt.plot(alley_temp['Age'], alley_temp['Temperature'], label = 'Alley (GISP-2)', color = 'darkblue', lw = 0.8, alpha = 0.8)
+# plt.plot(kindler['Age'], Tb[760:] - 273.15, label = 'Basal temperature', color = 'firebrick', lw = 0.8, alpha = 0.8)
 # plt.xlabel('Age (k.a.)')
-# plt.ylabel('Surface temperature (°C)')
-# plt.legend()
+# plt.ylabel('Temperature (°C)')
+# plt.legend(loc = 'lower left')
 # plt.show()
-
+quit()
 
 
 H = 3053
