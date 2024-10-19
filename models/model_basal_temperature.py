@@ -149,7 +149,7 @@ if __name__ == '__main__':
         'data/Kindler2014-ngrip.csv', skiprows = 12, sep = '\s+', usecols = [0, 1, 2, 3, 4], nrows = 5663-12,
         names = ['Depth', 'Age ss09sea06bm', 'Age', 'Accumulation', 'Temperature']
     )
-    lapse_rate = 6 / 1000
+    lapse_rate = 6.8 / 1000 # Fausto et al. (2009)
     elevation_diff = 3232 - 2917
     kindler['Temperature'] = kindler['Temperature'] - lapse_rate * elevation_diff
 

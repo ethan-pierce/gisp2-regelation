@@ -21,7 +21,7 @@ kindler = pd.read_csv(
     names = ['Depth', 'Age ss09sea06bm', 'Age', 'Accumulation', 'Temperature']
 )
 kindler['Age'] = kindler['Age'] * 1e-3
-lapse_rate = 6 / 1000
+lapse_rate = 6.8 / 1000
 elevation_diff = 3232 - 2917
 kindler['Temperature'] = kindler['Temperature'] - lapse_rate * elevation_diff
 
@@ -38,18 +38,20 @@ quit()
 Ts = basal_temperature['Temperature'] + 273.15
 
 sns.set_context('talk')
-fig, ax = plt.subplots(2, 1, figsize = (18, 6), sharex = True, height_ratios = [1, 2])
+fig, ax = plt.subplots(2, 1, figsize = (18, 10), sharex = True, height_ratios = [1, 2])
 
 ax[0].plot(age, acc, label = 'Accumulation', color = 'dodgerblue', lw = 1.1)
 ax[0].set_ylabel('$\dot{b}$ (m a$^{-1})$')
 ax[0].annotate('Accumulation', xy = (112, acc.iloc[-1] + 0.01), color = 'dodgerblue')
 
-ax[1].plot(age, Tb, label = 'Basal temperature', color = 'orange', lw = 1.1)
-ax[1].plot(age, Ts, label = 'Surface temperature', color = 'firebrick', lw = 1.1)
+ax[1].plot(age, Tb - 273.15, label = 'Basal temperature', color = 'orange', lw = 1.1)
+ax[1].plot(age, Ts - 273.15, label = 'Surface temperature', color = 'firebrick', lw = 1.1)
+ax[1].axhline(271.12 - 273.15, linestyle = '--', color = 'black', lw = 0.9, label = 'Pressure-melting point')
 ax[1].set_xlabel('Age (ka)')
-ax[1].set_ylabel('Temperature (K)')
-ax[1].annotate('Base', xy = (118, Tb.iloc[-1] + 2), color = 'orange')
-ax[1].annotate('Surface', xy = (118, Ts.iloc[-1] + 2), color = 'firebrick')
+ax[1].set_ylabel('Temperature (C)')
+ax[1].annotate('Base', xy = (118, Tb.iloc[-1] - 273.15 + 1.5), color = 'orange')
+ax[1].annotate('Surface', xy = (118, Ts.iloc[-1] - 273.15 + 2), color = 'firebrick')
+ax[1].annotate('Pressure-melting point', xy = (80, 271.12 - 273.15), color = 'black')
 
 plt.tight_layout()
 plt.savefig('results/figures/kindler_temperature_reconstruction.png', dpi = 300)
